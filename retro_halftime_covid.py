@@ -7,19 +7,21 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 
-# deepee is a pretty crude hack - it is how many columns to ignore
+# explanation of variables
+# deepee is how many columns to ignore
+# howmany is how many days to use for calculating rate at which doubling rate is changing (linear regression-wise)
+# peak is the date of the peak of the pandemic - March 17, 2020
+# nashun is the country to focus on - in this case the US
 deepee = 4
-# another crude hack - how many days to use for calculating the rate at which the doubling rate is changing
 howmany = 21
-# the peack of the covid pandemic in the US - when the doubling rate was highest
 peak = '3/17/20'
-# the data set is global - but here we are just interested in the US
 nashun = 'US'
 
 def rethaf(dethz, whereami):
 # This is the function that calculates the retroactive doubling time in days.
 # That is, it calculates how many days it has been since the number of deaths
-# was half of what it is now.
+# was half of what it is now. Linear interpolation is used to estimate the fractional
+# portion between whole days.
 	halfzy = dethz[whereami]/2.0
 	justAfter = -1
 	while(True):
@@ -30,9 +32,6 @@ def rethaf(dethz, whereami):
 		hd = (justAfter) + (dethz[whereami+1]-halfzy)/(dethz[whereami+1]-dethz[whereami])
 		break
 	return hd
-
-#def sloper(eenies):
-	
 
 with open('covid_deaths.csv') as covid_csv:
 	# from first line of data slice off first deepee columns - assign the rest to daytz
