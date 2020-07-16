@@ -72,19 +72,29 @@ for eye in range(len(i_dethz)-1, peaky-1, -1):
 
 ###   https://realpython.com/linear-regression-in-python/
 for backup in range(0,70):
+	# each time through this loop we create one dataset for linear regression
+	# each dataset contains howmany points
+	# the first dataset ends at the last date that we have
+	# each subsequent dataset moves back one day
 	exx = []
 	why = []
 	dz = []
 	for eye, daet in enumerate(daytz[-howmany-backup:len(daytz)-backup]):
-#		print("!!!!!!!!!!!!!!!!!!!!!!!", eye, daet, dethzDict[daet], halfzDict[daet])
+		# eye ranges from 0 to howmany-1
+		# daet ranges over the dates for this particular dataset
+		# why - the y variable - will be the retroactive doubling time in days
+		# exx - the x variable - is just the current value of eye
+		# dz is just the current value of daet
 		why.append(halfzDict[daet])
 		exx.append(eye)
 		dz.append(daet)
+	# now we have our dataset - so lets do some linear regressio
 	x = np.array(exx).reshape((-1,1))
 	y = np.array(why)
 	model = LinearRegression()
 	model.fit(x,y)
 	r_sq = model.score(x, y)
+	# now store the slope, intercept, and ending date for this dataset (the date where it ends)
 	slopzDict[dz[-1]] = model.coef_
 	intrzDict[dz[-1]] = model.intercept_
 	eeepzDict[dz[-1]] = daytz.index(dz[-1])
